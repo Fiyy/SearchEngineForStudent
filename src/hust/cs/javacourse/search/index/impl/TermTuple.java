@@ -62,7 +62,7 @@ public class TermTuple extends AbstractTermTuple {
     @Override
     public String toString() {
         String string = new String();
-        string += ("freq: " + this.freq + '\n');
+        string += ("freq:" + this.freq + '\n');
         string += ("curPos: " + this.curPos);
         string += '\n';
         string += term.toString();
