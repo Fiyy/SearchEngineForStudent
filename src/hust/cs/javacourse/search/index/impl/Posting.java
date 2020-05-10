@@ -37,6 +37,16 @@ public class Posting extends AbstractPosting {
     public Posting() {}
 
     /**
+     * 构造函数，直接调用父类构造函数
+     * @param docId：文档ID
+     * @param freq： 出现频率
+     * @param positions： 出现的位置序列表
+     */
+    public Posting(int docId, int freq, List<Integer> positions){
+        super(docId,freq,positions);
+    }
+
+    /**
      * 判断二个Posting内容是否相同
      *
      * @param obj ：要比较的另外一个Posting
