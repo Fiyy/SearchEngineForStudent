@@ -30,9 +30,9 @@ import java.util.List;
 public class PostingList extends AbstractPostingList {
 
     /**
-     * 缺省构造函数
+     * 缺省构造函数,必须是共有，否则测试程序没权限
      */
-    PostingList(){}
+    public PostingList(){}
 
     /**
      * 添加Posting,要求不能有内容重复的posting
