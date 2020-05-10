@@ -56,7 +56,7 @@ public class Posting extends AbstractPosting {
     public boolean equals(Object obj) {
         if(obj == this) return true;
         if(obj instanceof Posting){
-            if(docId == ((Posting) obj).docId && freq == ((Posting) obj).freq && positions.equals(((Posting) obj).positions))
+            if(docId == ((Posting) obj).docId && freq == ((Posting) obj).freq)
                 return true;
             else return false;
         }
@@ -189,5 +189,20 @@ public class Posting extends AbstractPosting {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    static public void main(String...args)
+    {
+        PostingList postingList = new PostingList();
+        ArrayList<Integer> postions1 = new ArrayList();
+        for(int i= 1;i<5;i++)
+            postions1.add(i);
+        Posting posting1 = new Posting(1,4, postions1);
+        ArrayList<Integer> postions2 = new ArrayList();
+        postions2.add(2);postions2.add(4);postions2.add(3);postions2.add(1);
+        Posting posting2 = new Posting(1,4,postions2);
+        postingList.add(posting1);
+        postingList.add(posting2);
+        System.out.println(postingList.toString());
     }
 }
