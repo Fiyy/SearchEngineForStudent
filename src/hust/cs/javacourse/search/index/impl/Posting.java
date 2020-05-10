@@ -12,9 +12,7 @@ package hust.cs.javacourse.search.index.impl;
 
 import hust.cs.javacourse.search.index.AbstractPosting;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -56,8 +54,12 @@ public class Posting extends AbstractPosting {
     public boolean equals(Object obj) {
         if(obj == this) return true;
         if(obj instanceof Posting){
-            if(docId == ((Posting) obj).docId && freq == ((Posting) obj).freq)
+            if(docId == ((Posting) obj).docId && freq == ((Posting) obj).freq && this.positions.size() == ((Posting) obj).getPositions().size()) {
+                for(int i = 0; i < ((Posting) obj).getPositions().size(); i++){
+                    if(!this.positions.contains(((Posting) obj).getPositions().get(i))) return false;
+                }
                 return true;
+            }
             else return false;
         }
         return false;
@@ -171,7 +173,6 @@ public class Posting extends AbstractPosting {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -193,6 +194,7 @@ public class Posting extends AbstractPosting {
 
     static public void main(String...args)
     {
+        // 测试能否加入重复Posting,结果是不能，符合要求
         PostingList postingList = new PostingList();
         ArrayList<Integer> postions1 = new ArrayList();
         for(int i= 1;i<5;i++)
@@ -204,5 +206,22 @@ public class Posting extends AbstractPosting {
         postingList.add(posting1);
         postingList.add(posting2);
         System.out.println(postingList.toString());
+
+        // 测试writeObject
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File("D:\\HUST\\java\\实验1\\test_posting.txt")));
+            posting1.writeObject(objectOutputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 测试readObject
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File("D:\\HUST\\java\\实验1\\test_posting.txt")));
+            Posting posting3 = new Posting();
+            posting3.readObject(objectInputStream);
+            System.out.println("The test readObject is:\n" + posting3);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
