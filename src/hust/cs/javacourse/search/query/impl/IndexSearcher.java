@@ -61,7 +61,10 @@ public class IndexSearcher extends AbstractIndexSearcher {
         ArrayList<AbstractHit> hits = new ArrayList<>(); //最终的返回数组
         //获取查询的postingList
         AbstractPostingList postingList = index.search(queryTerm);
-        if(postingList == null || postingList.isEmpty()) return null; //其实不需要检测是否为空，search直接返回了null
+        if(postingList == null || postingList.isEmpty()){
+            AbstractHit[] hits1 = new AbstractHit[hits.size()];
+            return hits.toArray(hits1);
+        }
         for(int i = 0; i< postingList.size(); i++){
             AbstractPosting posting = postingList.get(i);
             String filepath = index.getDocName(posting.getDocId());
@@ -93,7 +96,11 @@ public class IndexSearcher extends AbstractIndexSearcher {
             AbstractPostingList postingList1 = index.search(queryTerm1);
             AbstractPostingList postingList2 = index.search(queryTerm2);
 
-            if(postingList1 == null || postingList1.isEmpty()) return null; //其实不需要检测是否为空，search直接返回了null
+            if(postingList1 == null || postingList1.isEmpty())
+            {
+                AbstractHit[] hits1 = new AbstractHit[hits.size()];
+                return hits.toArray(hits1);
+            }
             // 第一个查询词的列表中找第二个词是否有相同的文档
             for(int i = 0; i< postingList1.size(); i++){
                 AbstractPosting posting1 = postingList1.get(i);
@@ -117,7 +124,10 @@ public class IndexSearcher extends AbstractIndexSearcher {
             //获取查询的postingList
             AbstractPostingList postingList1 = index.search(queryTerm1);
             AbstractPostingList postingList2 = index.search(queryTerm2);
-            if((postingList1 == null || postingList1.isEmpty()) && (postingList2 == null || postingList2.isEmpty())) return null; //其实不需要检测是否为空，search直接返回了null
+            if((postingList1 == null || postingList1.isEmpty()) && (postingList2 == null || postingList2.isEmpty())){
+                AbstractHit[] hits1 = new AbstractHit[hits.size()];
+                return hits.toArray(hits1);
+            }
             // 第一个查询词的列表中找第二个词是否有相同的文档
             for(int i = 0; i < postingList1.size(); i++){
                 AbstractPosting posting1 = postingList1.get(i);
