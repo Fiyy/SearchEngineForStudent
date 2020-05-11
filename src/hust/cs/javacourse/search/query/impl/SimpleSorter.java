@@ -36,7 +36,7 @@ public class SimpleSorter implements Sort {
      */
     @Override
     public void sort(List<AbstractHit> hits) {
-        Collections.sort(hits);
+        Collections.sort(hits, Collections.reverseOrder());
     }
 
     /**

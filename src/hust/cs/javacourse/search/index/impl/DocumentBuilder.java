@@ -19,6 +19,7 @@ import hust.cs.javacourse.search.parse.impl.LengthTermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.PatternTermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.StopWordTermTupleFilter;
 import hust.cs.javacourse.search.parse.impl.TermTupleScanner;
+import hust.cs.javacourse.search.query.AbstractHit;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -45,6 +46,10 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
      */
     @Override
     public AbstractDocument build(int docId, String docPath, AbstractTermTupleStream termTupleStream) {
+        AbstractDocument document = new Document();
+        File file = new File(docPath);
+        if(!file.isFile()) return document;
+        if(termTupleStream == null) return document;
         List<AbstractTermTuple> tuples = new ArrayList<>();
         AbstractTermTupleStream abstractTermTupleStream = new StopWordTermTupleFilter(termTupleStream);
         AbstractTermTupleStream abstractTermTupleStream1 = new PatternTermTupleFilter(abstractTermTupleStream);
@@ -54,7 +59,7 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
             tuples.add(temp);
             temp = abstractTermTupleStream2.next();
         }
-        AbstractDocument document = new Document(docId,docPath,tuples);
+        document = new Document(docId,docPath,tuples);
         return document;
     }
 
@@ -71,8 +76,11 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
      */
     @Override
     public AbstractDocument build(int docId, String docPath, File file) {
-        List<AbstractTermTuple> tuples = new ArrayList<>();
         AbstractDocument document = new Document();
+        if(file == null) return document;
+        if(!file.isFile() || docPath == null || docPath.equals(""))
+            return document;
+        List<AbstractTermTuple> tuples = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             AbstractTermTupleStream termTupleScanner = new TermTupleScanner(reader);
@@ -95,7 +103,8 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
         DocumentBuilder documentBuilder = new DocumentBuilder();
         String filePath = "D:\\HUST\\java\\实验1\\功能测试数据集\\1.txt";
         File file = new File(filePath);
-        AbstractDocument document = documentBuilder.build(0,filePath,file);
+        file = null;
+        AbstractDocument document = documentBuilder.build(0,"",file);
         System.out.println(document.getTuples());
     }
 }

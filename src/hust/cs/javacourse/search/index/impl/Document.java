@@ -31,7 +31,10 @@ public class Document extends AbstractDocument {
     /**
      * 缺省构造函数
      */
-    public Document() {}
+    public Document() {
+        docId = 0;
+        docPath = new String();
+    }
 
     /**
      * 不包含三元组列表的构造函数
@@ -97,11 +100,7 @@ public class Document extends AbstractDocument {
      */
     @Override
     public List<AbstractTermTuple> getTuples() {
-        List<AbstractTermTuple> list = new ArrayList<>();
-        for(int i = 0;i<tuples.size();i++){
-            list.add(tuples.get(i));
-        }
-        return list;
+        return this.tuples;
     }
 
     /**

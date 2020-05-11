@@ -22,7 +22,7 @@ public class TestSearchIndex {
      */
     public static void main(String[] args){
         IndexSearcher indexSearcher = new IndexSearcher();
-        indexSearcher.open("D:\\HUST\\java\\实验1\\index_save.txt");
+        indexSearcher.open("D:\\HUST\\java\\exp1\\index_save.txt");
         Term term = new Term("coronavirus");
         AbstractHit[] hits = indexSearcher.search(term, new SimpleSorter());
         for(AbstractHit hit:hits){

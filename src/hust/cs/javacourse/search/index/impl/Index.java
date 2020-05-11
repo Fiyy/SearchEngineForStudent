@@ -57,7 +57,7 @@ public class Index extends AbstractIndex {
      */
     @Override
     public void addDocument(AbstractDocument document) {
-        if(document == null) return;
+        if(document.getTupleSize() == 0) return;
         if(!docIdToDocPathMapping.containsKey(document.getDocId())){
             docIdToDocPathMapping.put(document.getDocId(), document.getDocPath());
         }
@@ -115,11 +115,13 @@ public class Index extends AbstractIndex {
     public void load(File file){
         ObjectInputStream in = null;
         try {
-            in = new ObjectInputStream(new FileInputStream(file));
+            if(file.isFile()) {
+                in = new ObjectInputStream(new FileInputStream(file));
+                this.readObject(in);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.readObject(in);
     }
 
     /**
@@ -129,8 +131,11 @@ public class Index extends AbstractIndex {
     @Override
     public void save(File file) {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-            this.writeObject(out);
+            if(file.isFile())
+            {
+                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+                this.writeObject(out);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -185,7 +190,7 @@ public class Index extends AbstractIndex {
     public String getDocName(int docId) {
         if(docIdToDocPathMapping.containsKey(docId))
             return docIdToDocPathMapping.get(docId);
-        else return null;
+        else return "";
     }
 
     /**
@@ -226,23 +231,21 @@ public class Index extends AbstractIndex {
      * @param args
      */
     public static void main(String...args){
-        // 测试save函数和load函数
         Index index = new Index();
-        File file = new File("D:\\HUST\\java\\实验1\\test_write.txt");
-        index.load(file);
-        //index.showTermToPostingListMapping();
-        // index显示正常,load函数正确
-
-        // 将index写入另一个文件，然后读取这个文件的索引且显示。
         index.save(new File("D:\\HUST\\java\\实验1\\test_save.txt"));
         Index index1 = new Index();
         index1.load(new File("D:\\HUST\\java\\实验1\\test_save.txt"));
         index1.showTermToPostingListMapping();
-        // 显示正确，save函数正确
+
+        // 测试save函数和load函数
+        File file = new File("D:\\HUST\\java\\实验1\\test_write.txt");
+        index.save(file);
+        //index.showTermToPostingListMapping();
+        // index显示正常,load函数正确
 
         /*        // 直接使用已经序列化好的文件进行测试反序列化的功能
         try {
-            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("D:\\\\HUST\\\\java\\\\实验1\\\\test_write.txt"));
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("D:\\HUST\\java\\实验1\\test_write.txt"));
             Index index = new Index();
             index.readObject(inputStream);
             System.out.println(index);

@@ -25,7 +25,9 @@ public class TermTuple extends AbstractTermTuple {
     /**
      *  缺省构造函数
      */
-    public TermTuple(){}
+    public TermTuple(){
+        term = new Term();
+    }
 
 
     /**

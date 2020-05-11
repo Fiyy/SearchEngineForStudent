@@ -168,8 +168,15 @@ public class IndexSearcher extends AbstractIndexSearcher {
     public static void main(String args[]){
         AbstractDocumentBuilder documentBuilder = new DocumentBuilder();
         AbstractIndexBuilder indexBuilder = new IndexBuilder(documentBuilder);
-        AbstractIndex index = indexBuilder.buildIndex("D:\\HUST\\java\\实验1\\真实测试数据集");
-        index.save(new File("D:\\HUST\\java\\实验1\\index_save.txt"));
+        AbstractIndex index = indexBuilder.buildIndex("D:\\HUST\\java\\exp1\\功能测试数据集");
+        index.save(new File("D:\\HUST\\java\\exp1\\index_save.txt"));
         ((Index)index).showTermToPostingListMapping();
+        IndexSearcher indexSearcher = new IndexSearcher();
+        indexSearcher.open("D:\\HUST\\java\\exp1\\index_save.txt");
+        AbstractTerm term = new Term("activity");
+        SimpleSorter sorter = new SimpleSorter();
+        System.out.println(Arrays.toString(indexSearcher.search(term, sorter)));
+        System.out.println(indexSearcher.search(term, sorter)[0].compareTo(indexSearcher.search(term, sorter)[1]));
+
     }
 }

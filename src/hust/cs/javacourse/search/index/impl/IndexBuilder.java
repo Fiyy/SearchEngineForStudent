@@ -36,29 +36,44 @@ public class IndexBuilder extends AbstractIndexBuilder {
     }
 
     /**
-     * <pre>
      * 构建指定目录下的所有文本文件的倒排索引.
      *      需要遍历和解析目录下的每个文本文件, 得到对应的Document对象，再依次加入到索引，并将索引保存到文件.
      * @param rootDirectory ：指定目录
      * @return ：构建好的索引
-     * </pre>
      */
     @Override
     public AbstractIndex buildIndex(String rootDirectory) {
+//        AbstractIndex index = new Index();
+//        List<String> fileList = new ArrayList<>();
+//        File path = new File(rootDirectory);
+//        if(!path.isDirectory()) return index;
+//        fileList = FileUtil.list(rootDirectory);
+//        int docId = 0;
+//
+//        for(String filePath : fileList){
+//            File file = new File(filePath);
+//            AbstractDocument document = docBuilder.build(docId++,filePath,file);
+//            //测试是否能成功获取document
+//            //System.out.println(document.getTuples());
+//            //①出现问题，程序
+//            index.addDocument(document);
+//            //测试是否可以成功添加，发现没有添加document到index的三元组映射中，bug在addDocument中
+//            //((Index)index).showTermToPostingListMapping();
+//        }
+//        index.optimize();
+//        return index;
         AbstractIndex index = new Index();
-        List<String> fileList = new ArrayList<>();
-        fileList = FileUtil.list(rootDirectory);
-        int docId = 0;
-
-        for(String filePath : fileList){
-            File file = new File(filePath);
-            AbstractDocument document = docBuilder.build(docId++,filePath,file);
-            //测试是否能成功获取document
-            //System.out.println(document.getTuples());
-            //①出现问题，程序
-            index.addDocument(document);
-            //测试是否可以成功添加，发现没有添加document到index的三元组映射中，bug在addDocument中
-            //((Index)index).showTermToPostingListMapping();
+        if(rootDirectory == null || rootDirectory.equals("")) return index;
+        File path = new File(rootDirectory);
+        if(path.isDirectory()){
+            for(File file: path.listFiles()){
+                if(file.isFile()){
+                    index.addDocument(docBuilder.build(docId++,file.getPath(),file));
+                }
+            }
+        }
+        else if(path.isFile()){
+            index.addDocument(docBuilder.build(docId++,path.getPath(),path));
         }
         index.optimize();
         return index;
@@ -76,9 +91,11 @@ public class IndexBuilder extends AbstractIndexBuilder {
         DocumentBuilder documentBuilder = new DocumentBuilder();
         IndexBuilder indexBuilder = new IndexBuilder(documentBuilder);
         String root = "D:\\HUST\\java\\实验1\\功能测试数据集";
-        AbstractIndex index = indexBuilder.buildIndex(root);
+        AbstractIndex index = indexBuilder.buildIndex("1234");
+        System.out.println(index);
+        index.save(new File("D:\\HUST\\java\\实验1\\test_save.txt"));
         ((Index)index).optimize(); //测试排序
-        ((Index)index).showTermToPostingListMapping();
+        //((Index)index).showTermToPostingListMapping();
         //System.out.println(index.toString());
     }
 }

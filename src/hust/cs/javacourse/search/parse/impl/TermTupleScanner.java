@@ -51,38 +51,81 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
 
     AbstractTermTuple termTuple; //返回的三元组
 
+    private boolean flag = false;
+
+    private void getAllTerm(){
+        String s = null;
+        try{
+            StringBuffer buf = new StringBuffer();
+            while( (s = input.readLine()) != null){
+                buf.append(s).append("\n"); //reader.readLine())返回的字符串会去掉换行符，因此这里要加上
+            }
+            s = buf.toString().trim(); //去掉最后一个多的换行符
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            StringSplitter splitter = new StringSplitter();
+            splitter.setSplitRegex(Config.STRING_SPLITTER_REGEX);
+            parts = splitter.splitByRegex(s);
+            pos = 0;
+            size = parts.size();
+            flag = true;
+        }
+    }
+
     @Override
     public AbstractTermTuple next() {
-        termTuple = new TermTuple();
-        if(size != 0 && pos1 < size){
-            termTuple.curPos = pos++;
-            termTuple.term = new Term(parts.get(pos1++));
+//        termTuple = new TermTuple();
+//        if(size != 0 && pos1 < size){
+//            termTuple.curPos = pos++;
+//            termTuple.term = new Term(parts.get(pos1++));
+//        }
+//        else{
+//            try {
+//                String string = input.readLine();
+//                while(string != null && string.isEmpty())
+//                    string = input.readLine();
+//                if(string == null){
+//                    this.close();
+//                    termTuple = null;
+//                }
+//                // System.out.print(string);
+//                else{
+//                    StringSplitter splitter = new StringSplitter();
+//                    splitter.setSplitRegex(Config.STRING_SPLITTER_REGEX);
+//                    parts = splitter.splitByRegex(string);
+//                    pos1 = 0;
+//                    size = parts.size();
+//                    termTuple.curPos = pos++;
+//                    if(!parts.isEmpty())
+//                    termTuple.term = new Term(parts.get(pos1++));
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return termTuple;
+        if(flag == false) this.getAllTerm();
+        if(pos < size){
+            termTuple = new TermTuple();
+            termTuple.term.setContent(parts.get(pos));
+            termTuple.curPos = pos;
+            pos++;
+            return termTuple;
         }
-        else{
-            try {
-                String string = input.readLine();
-                while(string != null && string.isEmpty())
-                    string = input.readLine();
-                if(string == null){
-                    this.close();
-                    termTuple = null;
-                }
-                // System.out.print(string);
-                else{
-                    StringSplitter splitter = new StringSplitter();
-                    splitter.setSplitRegex(Config.STRING_SPLITTER_REGEX);
-                    parts = splitter.splitByRegex(string);
-                    pos1 = 0;
-                    size = parts.size();
-                    termTuple.curPos = pos++;
-                    if(!parts.isEmpty())
-                    termTuple.term = new Term(parts.get(pos1++));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        else {
+            return null;
         }
-        return termTuple;
     }
 
     /**

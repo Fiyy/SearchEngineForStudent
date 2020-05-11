@@ -30,7 +30,9 @@ public class Term extends AbstractTerm {
     /**
      * 缺省构造函数
      */
-    public Term() {}
+    public Term() {
+        content = new String();
+    }
 
     /**
      * 构造函数

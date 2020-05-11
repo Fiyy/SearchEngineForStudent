@@ -32,7 +32,9 @@ public class Hit extends AbstractHit {
     /**
      * 默认构造函数
      */
-    public Hit() {}
+    public Hit() {
+        this.score = 1;
+    }
 
     /**
      * 构造函数
@@ -41,6 +43,7 @@ public class Hit extends AbstractHit {
      */
     public Hit(int docId, String docPath){
         super(docId, docPath);
+        this.score = 1;
     }
 
     /**
@@ -51,6 +54,7 @@ public class Hit extends AbstractHit {
      */
     public Hit(int docId, String docPath, Map<AbstractTerm, AbstractPosting> termPostingMapping){
         super(docId, docPath, termPostingMapping);
+        this.score = 1;
     }
 
     /**
@@ -148,7 +152,9 @@ public class Hit extends AbstractHit {
     @Override
     public int compareTo(AbstractHit o) {
         //为了使排序结果为大到小，变为负值
-        return (int)Math.ceil( -this.score + o.getScore());
+        if(o!=null)
+            return (int)Math.ceil(this.score - o.getScore());
+        else return (int)Math.ceil(this.score);
     }
 
     public static void main(String args[]){
