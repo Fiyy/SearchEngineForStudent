@@ -121,6 +121,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
             termTuple.term.setContent(parts.get(pos));
             termTuple.curPos = pos;
             pos++;
+            if(termTuple != null) termTuple.term.setContent(termTuple.term.getContent().toLowerCase());
             return termTuple;
         }
         else {
@@ -136,7 +137,7 @@ public class TermTupleScanner extends AbstractTermTupleScanner {
      */
     public static void main(String args[]){
         List<AbstractTermTuple> tuples = new ArrayList<>();
-        File file = new File("D:\\HUST\\java\\实验1\\功能测试数据集\\1.txt");
+        File file = new File("D:\\HUST\\java\\exp1\\功能测试数据集\\1.txt");
         AbstractDocument document = new Document();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
