@@ -68,6 +68,7 @@ public class TermTuple extends AbstractTermTuple {
         string += ("curPos: " + this.curPos);
         string += '\n';
         string += term.toString();
+        string += '\n';
         return string;
     }
 }

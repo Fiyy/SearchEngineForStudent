@@ -27,7 +27,7 @@ public class LengthTermTupleFilter extends AbstractTermTupleFilter {
 
     /**
      * 构造函数
-     *
+     * 长度过滤竟然还要将大写换为小写？？？发现每种过滤器都需要，因此在scanner阶段就更改
      * @param input ：Filter的输入，类型为AbstractTermTupleStream
      */
 

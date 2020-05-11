@@ -54,10 +54,13 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
         AbstractTermTupleStream abstractTermTupleStream = new StopWordTermTupleFilter(termTupleStream);
         AbstractTermTupleStream abstractTermTupleStream1 = new PatternTermTupleFilter(abstractTermTupleStream);
         AbstractTermTupleStream abstractTermTupleStream2 = new LengthTermTupleFilter(abstractTermTupleStream1);
-        AbstractTermTuple temp = abstractTermTupleStream2.next();
+        // 更换后
+        // AbstractTermTupleStream abstractTermTupleStream2 = new PatternTermTupleFilter(termTupleStream);
+        AbstractTermTuple temp = termTupleStream.next();
         while(temp!=null){
             tuples.add(temp);
             temp = abstractTermTupleStream2.next();
+            //temp = termTupleStream.next(); //直接将不过滤的版本输出
         }
         document = new Document(docId,docPath,tuples);
         return document;
@@ -101,10 +104,10 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
      */
     public static void main(String args[]){
         DocumentBuilder documentBuilder = new DocumentBuilder();
-        String filePath = "D:\\HUST\\java\\实验1\\功能测试数据集\\1.txt";
+        String filePath = "D:\\HUST\\java\\exp1\\功能测试数据集\\2.txt";
         File file = new File(filePath);
-        file = null;
-        AbstractDocument document = documentBuilder.build(0,"",file);
+        //file = null;
+        AbstractDocument document = documentBuilder.build(0,filePath,file);
         System.out.println(document.getTuples());
     }
 }
