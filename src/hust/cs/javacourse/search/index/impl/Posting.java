@@ -209,14 +209,14 @@ public class Posting extends AbstractPosting {
 
         // 测试writeObject
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File("D:\\HUST\\java\\实验1\\test_posting.txt")));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File("D:\\HUST\\java\\exp1\\test_posting.txt")));
             posting1.writeObject(objectOutputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
         // 测试readObject
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File("D:\\HUST\\java\\实验1\\test_posting.txt")));
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File("D:\\HUST\\java\\exp1\\test_posting.txt")));
             Posting posting3 = new Posting();
             posting3.readObject(objectInputStream);
             System.out.println("The test readObject is:\n" + posting3);
