@@ -91,7 +91,7 @@ public class IndexSearcher extends AbstractIndexSearcher {
     @Override
     public AbstractHit[] search(AbstractTerm queryTerm1, AbstractTerm queryTerm2, Sort sorter, LogicalCombination combine) {
         ArrayList<AbstractHit> hits = new ArrayList<>(); //最终的返回数组
-        if(combine == LogicalCombination.ADN){
+        if(combine == LogicalCombination.AND){
             //获取查询的postingList
             AbstractPostingList postingList1 = index.search(queryTerm1);
             AbstractPostingList postingList2 = index.search(queryTerm2);
@@ -168,7 +168,8 @@ public class IndexSearcher extends AbstractIndexSearcher {
             }
         }
         sorter.sort(hits);
-        return (AbstractHit[])hits.toArray();
+        AbstractHit[] hits1 = new AbstractHit[hits.size()];
+        return hits.toArray(hits1);
     }
 
     /**
@@ -187,6 +188,5 @@ public class IndexSearcher extends AbstractIndexSearcher {
         SimpleSorter sorter = new SimpleSorter();
         System.out.println(Arrays.toString(indexSearcher.search(term, sorter)));
         System.out.println(indexSearcher.search(term, sorter)[0].compareTo(indexSearcher.search(term, sorter)[1]));
-
     }
 }
