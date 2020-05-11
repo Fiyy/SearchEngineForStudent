@@ -51,20 +51,18 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
         if(!file.isFile()) return document;
         if(termTupleStream == null) return document;
         List<AbstractTermTuple> tuples = new ArrayList<>();
-        AbstractTermTupleStream abstractTermTupleStream = new StopWordTermTupleFilter(termTupleStream);
-        AbstractTermTupleStream abstractTermTupleStream1 = new PatternTermTupleFilter(abstractTermTupleStream);
-        AbstractTermTupleStream abstractTermTupleStream2 = new LengthTermTupleFilter(abstractTermTupleStream1);
         // 更换后
         // AbstractTermTupleStream abstractTermTupleStream2 = new PatternTermTupleFilter(termTupleStream);
         AbstractTermTuple temp = termTupleStream.next();
         while(temp!=null){
             tuples.add(temp);
-            temp = abstractTermTupleStream2.next();
+            temp = termTupleStream.next();
             //temp = termTupleStream.next(); //直接将不过滤的版本输出
         }
         document = new Document(docId,docPath,tuples);
         return document;
     }
+
 
     /**
      * <pre>
@@ -87,7 +85,10 @@ public class DocumentBuilder extends AbstractDocumentBuilder {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             AbstractTermTupleStream termTupleScanner = new TermTupleScanner(reader);
-            document = this.build(docId,docPath, termTupleScanner);
+            AbstractTermTupleStream abstractTermTupleStream = new StopWordTermTupleFilter(termTupleScanner);
+            AbstractTermTupleStream abstractTermTupleStream1 = new PatternTermTupleFilter(abstractTermTupleStream);
+            AbstractTermTupleStream abstractTermTupleStream2 = new LengthTermTupleFilter(abstractTermTupleStream1);
+            document = this.build(docId,docPath, abstractTermTupleStream2);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
